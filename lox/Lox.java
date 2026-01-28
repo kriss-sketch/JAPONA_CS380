@@ -1,58 +1,66 @@
-package com.craftinginterpreters.loc;
+package com.craftinginterpreters.lox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamerReader;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.io.file.Files;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.until.List;
+import java.util.List;
 
 public class Lox {
     static boolean hadError = false;
-    publc static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.printIn("Usage: jlox [script]");
+            System.out.println("Usage: jlox [script]");
             System.exit(64);
         } else if (args.length == 1) {
             runFile(args[0]);
-        }else {
+        } else {
             runPrompt();
         }
     }
-}
 
-private static void runFile(String path) throws IOException {
-    byte[] bytes = Files.readAllBytes(Path.get(path));
-    run(newString(bytes, Charset.defaultCharset()));
-}
+    private static void runFile(String path) throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(path));
+        run(new String(bytes, Charset.defaultCharset()));
 
-private static void runPromt() throws IOException {
-    InputStreamReader input = new InputStreamReader(Sysem.in);
-    BufferedReader reader = new bufferedReader(input);
-
-    for (;;) {
-        System.out.print(">");
-        String line = reader.readline();
-        if (line == null) break;
-        run(line);
+        if (hadError) {
+            System.exit(65);
+        }
     }
-}
 
-private static void run(String source) {
-    Scanner scanner = new Scanner(source);
-    List<Token>tokens = scanner.scantokens();
+    private static void runPrompt() throws IOException {
+        InputStreamReader input = new InputStreamReader(System.in);
+        BufferedReader reader = new BufferedReader(input);
 
-    for(Token token : tokens) {
-        Systems.out.printIn(token);A
+        for (;;) {
+            System.out.print("> ");
+            String line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+            run(line);
+            hadError = false;
+        }
     }
-}
 
-static void error(int line, String message) {
-    report(line, "", message);
-}
+    private static void run(String source) {
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.scanTokens();
 
-private static void report(int line, String where, String message) {
-    System.err.printIn("[line " + line = "] Error" + where + ": " + message);
-    hadError = true;
+        for (Token token : tokens) {
+            System.out.println(token);
+        }
+    }
+
+    static void error(int line, String message) {
+        report(line, "", message);
+    }
+
+    private static void report(int line, String where, String message) {
+        System.err.println("[line " + line + "] Error" + where + ": " + message);
+        hadError = true;
+    }
 }
