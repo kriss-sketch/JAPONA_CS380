@@ -1,11 +1,11 @@
-package com.craftinginterpreters.lox.tool;
+package com.craftinginterpreters.tool;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-class GenerateAst {
+public class GenerateAst {
 	public static void main(String[] args) throws IOException {
 		if (args.length != 1) {
 			System.out.println("Usage: generate_ast <output directory>");
@@ -15,6 +15,7 @@ class GenerateAst {
 
 		defineAst(outputDir, "Expr", Arrays.asList(
 			"Assign   : Token name, Expr value",
+			"Call     : Expr callee, Token paren, List<Expr> arguments",
 			"Binary   : Expr left, Token operator, Expr right",
 			"Grouping : Expr expression",
 			"Literal  : Object value",
@@ -26,8 +27,11 @@ class GenerateAst {
 		defineAst(outputDir, "Stmt", Arrays.asList(
 			"Block      : List<Stmt> statements",
 			"Expression : Expr expression",
+			"Function   : Token name, List<Token> params," +
+                		" List<Stmt> body",
 			"If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
 			"Print      : Expr expression",
+			"Return     : Token keyword, Expr value",
 			"Var        : Token name, Expr initializer",
 			"While      : Expr condition, Stmt body"
 		));
