@@ -1,0 +1,12 @@
+fun greet(name) {
+    print "Hello, " + name + "!";
+}
+
+fun thrice(i) {
+    for (var i = 1; i <= 3; i = i + 1) {
+        print i;
+    }
+}
+
+greet("world");
+thrice(3);
